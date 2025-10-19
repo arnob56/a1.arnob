@@ -118,6 +118,15 @@
       background: #43a047;
     }
 
+    #downloadBtn {
+      background: #f39c12;
+      margin-left: 5px;
+    }
+
+    #downloadBtn:hover {
+      background: #e67e22;
+    }
+
     .footer {
       margin-top: 15px;
       font-style: italic;
@@ -129,7 +138,7 @@
 
   <!-- Header with Logo -->
   <header>
-    <img src="https://jobmatchingbd.com/wp-content/uploads/wp-job-board-pro-uploads/_employer_featured_image/2025/08/Hanif-Enterprise.jpg" alt="Hanif Enterprise Logo" />
+    <img src="hanif_logo.png" alt="Hanif Enterprise Logo" />
     <h1>Hanif Enterprise Ticket Booking</h1>
   </header>
 
@@ -177,6 +186,7 @@
 
   <button id="confirmBtn" onclick="confirmBooking()">✅ Confirm Booking</button>
   <button onclick="printTicket()">🖨️ Print Ticket</button>
+  <button id="downloadBtn" onclick="downloadReport()">⬇️ Download Report</button>
 
   <script>
     const seatContainer = document.getElementById("seatContainer");
@@ -255,10 +265,6 @@
       updateTicket();
     }
 
-    routeSelect.addEventListener("change", updateTicket);
-    busTypeSelect.addEventListener("change", updateTicket);
-    givenAmountSelect.addEventListener("change", updateTicket);
-
     function printTicket() {
       const ticketSection = document.getElementById("ticket");
       const printWindow = window.open("", "_blank");
@@ -301,6 +307,37 @@
       printWindow.focus();
       printWindow.print();
     }
+
+    function downloadReport() {
+      const date = new Date().toLocaleString();
+      const data = `
+Hanif Enterprise Ticket Report
+------------------------------
+Route: ${routeText.innerText}
+Bus Type: ${busTypeText.innerText}
+Fare per person: ৳${farePerPerson.innerText}
+Selected Seats: ${selectedSeatsText.innerText}
+Total Fare: ৳${totalFareText.innerText}
+Given Amount: ৳${givenAmountText.innerText}
+Return Amount: ৳${returnAmountText.innerText}
+Generated on: ${date}
+------------------------------
+Thank you for using Hanif Enterprise!
+      `;
+      const blob = new Blob([data], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "hanif_ticket_report.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    routeSelect.addEventListener("change", updateTicket);
+    busTypeSelect.addEventListener("change", updateTicket);
+    givenAmountSelect.addEventListener("change", updateTicket);
 
     updateTicket();
   </script>
