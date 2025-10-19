@@ -1,0 +1,133 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
+  color: #333;
+  text-align: center;
+  padding: 20px;
+}
+
+.booking-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.bus {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.driver {
+  background: #212121;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  gap: 15px 20px;
+  justify-content: center;
+}
+
+.aisle {
+  visibility: hidden;
+}
+
+.seat {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  background: #ddd;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.seat i {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.seat:hover {
+  transform: scale(1.1);
+}
+
+.seat.selected {
+  background: #4CAF50;
+  color: white;
+}
+
+.seat.booked {
+  background: #e74c3c;
+  color: white;
+  cursor: not-allowed;
+}
+
+.form-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  width: 280px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  text-align: left;
+  font-weight: 500;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.info {
+  margin-top: 20px;
+  text-align: left;
+  line-height: 1.6;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1565c0;
+}
+
+.ticket {
+  display: none;
+  margin-top: 40px;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+  text-align: left;
+}

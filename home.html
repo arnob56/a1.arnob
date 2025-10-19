@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanif Enterprise Ticket Booking</title>
+  <link rel="stylesheet" href="st.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <h1>🚌 Hanif Enterprise Ticket Booking</h1>
+
+  <div class="booking-container">
+    <div class="bus">
+      <div class="driver">Driver</div>
+      <div class="seats"></div>
+    </div>
+
+    <div class="form-section">
+      <h2>Ticket Details</h2>
+
+      <label>Route:</label>
+      <select id="route">
+        <option value="Dhaka-Mymensingh">Dhaka → Mymensingh</option>
+        <option value="Mymensingh-Dhaka">Mymensingh → Dhaka</option>
+      </select>
+
+      <label>Bus Type:</label>
+      <select id="busType">
+        <option value="Non AC">Non AC (৳310)</option>
+        <option value="AC">AC (৳450)</option>
+      </select>
+
+      <label>Given Amount:</label>
+      <select id="givenAmount">
+        <option value="0">Select</option>
+        <option value="500">৳500</option>
+        <option value="1000">৳1000</option>
+        <option value="2000">৳2000</option>
+      </select>
+
+      <div class="info">
+        <p>Selected Seats: <span id="selected">0</span></p>
+        <p>Total Fare: ৳<span id="total">0</span></p>
+        <p>Return Amount: ৳<span id="return">0</span></p>
+      </div>
+
+      <button id="printBtn">🧾 Print Ticket</button>
+    </div>
+  </div>
+
+  <div id="ticket" class="ticket"></div>
+
+  <script src="sc.js"></script>
+</body>
+</html>
