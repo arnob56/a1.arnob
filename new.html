@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hanif Enterprise Ticket</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      background: #f0f3f8;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    header h1 {
+      font-size: 1.8em;
+      color: #1a73e8;
+    }
+
+    .bus {
+      display: inline-block;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-top: 30px;
+    }
+
+    .driver {
+      background: #222;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      width: 60px;
+      margin: 0 auto 15px auto;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(4, 50px);
+      gap: 10px 30px;
+      justify-content: center;
+    }
+
+    .seat {
+      width: 50px;
+      height: 50px;
+      background: #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .seat.selected {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .seat.booked {
+      background: #e74c3c;
+      color: white;
+      cursor: not-allowed;
+    }
+
+    .ticket-summary {
+      background: white;
+      width: 350px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+
+    select, button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    button {
+      background: #1a73e8;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1669c1;
+    }
+
+    #confirmBtn {
+      display: none;
+      margin-top: 15px;
+      background: #4CAF50;
+    }
+
+    #confirmBtn:hover {
+      background: #43a047;
+    }
+
+    .footer {
+      margin-top: 15px;
+      font-style: italic;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header with Logo -->
+  <header>
+    <img src="https://jobmatchingbd.com/wp-content/uploads/wp-job-board-pro-uploads/_employer_featured_image/2025/08/Hanif-Enterprise.jpg" alt="Hanif Enterprise Logo" />
+    <h1>Hanif Enterprise Ticket Booking</h1>
+  </header>
+
+  <div class="bus">
+    <div class="driver">Driver</div>
+    <div class="seats" id="seatContainer"></div>
+  </div>
+
+  <div>
+    <label>Route:</label>
+    <select id="route">
+      <option value="Dhaka-Mymensingh">Dhaka → Mymensingh</option>
+      <option value="Mymensingh-Dhaka">Mymensingh → Dhaka</option>
+    </select>
+
+    <br />
+
+    <label>Bus Type:</label>
+    <select id="busType">
+      <option value="Non AC">Non AC (৳310)</option>
+      <option value="AC">AC (৳450)</option>
+    </select>
+
+    <br />
+
+    <label>Given Amount:</label>
+    <select id="givenAmount">
+      <option value="500">৳500</option>
+      <option value="1000">৳1000</option>
+      <option value="2000">৳2000</option>
+    </select>
+  </div>
+
+  <div id="ticket" class="ticket-summary">
+    <h2>🧾 Hanif Enterprise Ticket</h2>
+    <p><b>Route:</b> <span id="routeText">Dhaka-Mymensingh</span></p>
+    <p><b>Bus Type:</b> <span id="busTypeText">Non AC</span></p>
+    <p><b>Fare (per person):</b> ৳<span id="farePerPerson">310</span></p>
+    <p><b>Selected Seats:</b> <span id="selectedSeats">None</span></p>
+    <p><b>Total Fare:</b> ৳<span id="totalFare">0</span></p>
+    <p><b>Given Amount:</b> ৳<span id="givenAmountText">500</span></p>
+    <p><b>Return Amount:</b> ৳<span id="returnAmount">0</span></p>
+    <p class="footer">Thank you for choosing Hanif Enterprise!</p>
+  </div>
+
+  <button id="confirmBtn" onclick="confirmBooking()">✅ Confirm Booking</button>
+  <button onclick="printTicket()">🖨️ Print Ticket</button>
+
+  <script>
+    const seatContainer = document.getElementById("seatContainer");
+    const maxSeats = 5;
+
+    const routeSelect = document.getElementById("route");
+    const busTypeSelect = document.getElementById("busType");
+    const givenAmountSelect = document.getElementById("givenAmount");
+
+    const routeText = document.getElementById("routeText");
+    const busTypeText = document.getElementById("busTypeText");
+    const farePerPerson = document.getElementById("farePerPerson");
+    const selectedSeatsText = document.getElementById("selectedSeats");
+    const totalFareText = document.getElementById("totalFare");
+    const givenAmountText = document.getElementById("givenAmountText");
+    const returnAmountText = document.getElementById("returnAmount");
+
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    // Generate seats (A–I rows, 4 per row)
+    const rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+    rows.forEach(row => {
+      for (let i = 1; i <= 4; i++) {
+        const seat = document.createElement("div");
+        seat.classList.add("seat");
+        seat.innerText = `${row}${i}`;
+        seatContainer.appendChild(seat);
+
+        seat.addEventListener("click", () => {
+          if (seat.classList.contains("booked")) return;
+          if (seat.classList.contains("selected")) {
+            seat.classList.remove("selected");
+          } else {
+            if (document.querySelectorAll(".seat.selected").length >= maxSeats) {
+              alert("You can select a maximum of 5 seats!");
+              return;
+            }
+            seat.classList.add("selected");
+          }
+          updateTicket();
+        });
+      }
+    });
+
+    function updateTicket() {
+      const selectedSeats = Array.from(document.querySelectorAll(".seat.selected"))
+        .map(seat => seat.innerText);
+      const fare = busTypeSelect.value === "AC" ? 450 : 310;
+      const totalFare = selectedSeats.length * fare;
+      const givenAmount = parseInt(givenAmountSelect.value);
+      const returnAmount = givenAmount - totalFare;
+
+      routeText.innerText = routeSelect.value;
+      busTypeText.innerText = busTypeSelect.value;
+      farePerPerson.innerText = fare;
+      selectedSeatsText.innerText = selectedSeats.length > 0 ? selectedSeats.join(", ") : "None";
+      totalFareText.innerText = totalFare;
+      givenAmountText.innerText = givenAmount;
+      returnAmountText.innerText = returnAmount >= 0 ? returnAmount : "Insufficient Amount!";
+
+      confirmBtn.style.display = selectedSeats.length > 0 ? "inline-block" : "none";
+    }
+
+    function confirmBooking() {
+      const selectedSeats = Array.from(document.querySelectorAll(".seat.selected"));
+      if (selectedSeats.length === 0) {
+        alert("Please select at least one seat.");
+        return;
+      }
+      selectedSeats.forEach(seat => {
+        seat.classList.remove("selected");
+        seat.classList.add("booked");
+      });
+      confirmBtn.style.display = "none";
+      alert("✅ Booking confirmed!");
+      updateTicket();
+    }
+
+    routeSelect.addEventListener("change", updateTicket);
+    busTypeSelect.addEventListener("change", updateTicket);
+    givenAmountSelect.addEventListener("change", updateTicket);
+
+    function printTicket() {
+      const ticketSection = document.getElementById("ticket");
+      const printWindow = window.open("", "_blank");
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Hanif Enterprise Ticket</title>
+            <style>
+              body {
+                font-family: 'Poppins', sans-serif;
+                background: #f9fafc;
+                padding: 20px;
+                color: #333;
+                text-align: center;
+              }
+              .ticket-box {
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                width: 350px;
+                margin: 0 auto;
+              }
+              h2 { color: #1a73e8; margin-bottom: 10px; }
+              p { margin: 6px 0; font-size: 15px; text-align: left; }
+              b { color: #333; }
+              .footer { margin-top: 15px; font-style: italic; color: #777; }
+              img { width: 120px; margin-bottom: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="ticket-box">
+              <img src="hanif_logo.png" alt="Hanif Logo" />
+              ${ticketSection.innerHTML}
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+
+    updateTicket();
+  </script>
+</body>
+</html>
