@@ -1,0 +1,24 @@
+h1 {
+    color: brown;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-shadow: 0capx 2px 4px #aaa;
+}
+body {
+    background-color: #f0f8ff;
+    font-family: 'Verdana', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+button {
+    background-color: cornflowerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px 5px;
+}
